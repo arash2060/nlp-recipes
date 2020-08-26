@@ -10,6 +10,7 @@ import pandas as pd
 import spacy
 import nltk
 from nltk.corpus import stopwords
+import en_core_web_sm
 
 
 def to_lowercase_all(df):
@@ -62,7 +63,7 @@ def to_spacy_tokens(
         pd.DataFrame: Dataframe with new columns token_cols, each containing
                             a list of tokens for their respective sentences.
     """
-    nlp = spacy.load("en_core_web_sm")
+    nlp = en_core_web_sm.load()
     text_df = df[sentence_cols]
     nlp_df = text_df.applymap(lambda x: nlp(x))
     tok_df = nlp_df.applymap(lambda doc: [token.text for token in doc])
@@ -94,7 +95,7 @@ def rm_spacy_stopwords(
         pd.DataFrame: Dataframe with new columns stop_cols, each containing a
             list of tokens for their respective sentences.
     """
-    nlp = spacy.load("en_core_web_sm")
+    nlp = en_core_web_sm.load()
     if len(custom_stopwords) > 0:
         for csw in custom_stopwords:
             nlp.vocab[csw].is_stop = True
